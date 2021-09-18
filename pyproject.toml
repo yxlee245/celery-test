@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "celery-test"
+version = "0.1.0"
+description = ""
+authors = ["yxlee245 <the.force.of.life@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+celery = "<5.0"
+redis = "^3.5.3"
+SQLAlchemy = "^1.4.23"
+psycopg2-binary = "^2.9.1"
+
+[tool.poetry.dev-dependencies]
+black = {version = "^21.9b0", allow-prereleases = true}
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
