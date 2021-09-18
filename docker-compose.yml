@@ -1,0 +1,49 @@
+version: '3.8'
+
+x-environment: &celery_env
+  - CELERY_BROKER_URL=redis://redis:6379/0
+  - CELERY_BACKEND_URL=db+postgresql://celery:celery@postgres:5432/celery
+
+services: 
+  redis:
+    image: redis:5-alpine
+    networks: 
+      - celery
+
+  postgres:
+    image: postgres:12-alpine
+    environment: 
+      - POSTGRES_USER=celery
+      - POSTGRES_PASSWORD=celery
+      - POSTGRES_DB=celery
+    ports: 
+      - 5432:5432
+    networks: 
+      -  celery
+
+  worker:
+    build: 
+      context: .
+    networks: 
+      - celery
+    depends_on:
+      - redis
+      - postgres
+      - runner
+    environment: *celery_env
+    command: celery --app=tasks.celery_app worker --loglevel=INFO
+
+  runner:
+    build: 
+      context: .
+    networks: 
+      - celery
+    depends_on: 
+      - redis
+      - postgres
+    environment: *celery_env
+    command: python run.py
+
+networks: 
+  celery:
+    name: celery
