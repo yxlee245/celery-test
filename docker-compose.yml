@@ -29,11 +29,11 @@ services:
     depends_on:
       - redis
       - postgres
-      - runner
+      - web
     environment: *celery_env
     command: celery --app=tasks.celery_app worker --loglevel=INFO
 
-  runner:
+  web:
     build: 
       context: .
     networks: 
@@ -42,7 +42,9 @@ services:
       - redis
       - postgres
     environment: *celery_env
-    command: python run.py
+    command: uvicorn main:app --host 0.0.0.0 --reload
+    ports: 
+      - 8004:8000
 
 networks: 
   celery:
