@@ -17,7 +17,7 @@ services:
       - POSTGRES_PASSWORD=celery
       - POSTGRES_DB=celery
     ports: 
-      - 5432:5432
+      - '5432'
     networks: 
       -  celery
 
